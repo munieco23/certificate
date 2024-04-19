@@ -16,7 +16,7 @@ export const getCertificationAuthorities = async ({} = {}) => {
   return data
 }
 
-export const certificateSignRequest = async ({ catName, template, obj } = {}) => {
+export const certificateSignRequest = async (catName, template, obj) => {
   let { data: data } = await api.post(
     `/certificates/${catName}?certificateTemplate=${template}`,
     {
@@ -30,7 +30,7 @@ export const certificateSignRequest = async ({ catName, template, obj } = {}) =>
     }
   )
 
-  return data?.data
+  return data
 }
 
 const certificates = { getCertificationAuthorities, certificateSignRequest }

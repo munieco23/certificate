@@ -14,14 +14,21 @@
           </div>
         </div>
         <Textarea class="w-full mb-2" v-model="certificateText" rows="5" cols="30" placeholder="paste code here" />
-        <Button label="Request certificate" class="w-20rem m-auto p-button" @click="requestCertificate()"
-          :loading="isLoading" :disabled="allowSave"></Button>
+        <InputText class="w-full" v-model="certName" placeholder="(Optional) Certificate name"></InputText>
+        <div class="footer-container flex gap-2">
+          <Button label="Reset" severity="secondary" class="w-20rem m-auto p-button" @click="reload()"></Button>
+          <Button label="Request certificate" severity="primary" class="w-20rem m-auto p-button"
+            @click="requestCertificate()" :loading="isLoading" :disabled="allowSave"></Button>
+        </div>
+
       </div>
     </div>
   </div>
+  <Toast position="bottom-right" group="layoutToast" />
 </template>
 
 <script setup>
+import Toast from 'primevue/toast';
 import { ref, watch, computed, onMounted } from "vue";
 import { nextTick } from '@vue/runtime-core';
 import Button from "primevue/button";
@@ -30,13 +37,16 @@ import InputText from 'primevue/inputtext';
 import Textarea from 'primevue/textarea';
 import { getCertificationAuthorities, certificateSignRequest } from '../services/certificates.js';
 import Navbar from '../components/NavBar.vue'
+import { useToast } from "primevue/usetoast";
 
+const toast = useToast();
 const authOptions = ref([]);
 const tempOptions = ref([]);
 const isLoading = ref(false);
 const authority = ref();
 const template = ref(null);
 const certificateText = ref(null);
+const certName = ref("");
 const _data = ref([]);
 
 watch(_data, (v) => {
@@ -46,7 +56,6 @@ watch(_data, (v) => {
     });
   }
 });
-
 
 watch(authOptions, (v) => {
   if (v.length > 0) {
@@ -75,34 +84,70 @@ const allowSave = computed(() => {
 })
 
 const certificationAuthorities = async () => {
+  isLoading.value = true;
   try {
+    isLoading.value = false;
     const res = await getCertificationAuthorities();
   } catch (err) {
+    isLoading.value = false;
     console.log(err);
   }
 }
 
 const requestCertificate = async () => {
-  const res = await certificateSignInRequest();
+  isLoading.value = true;
 
-  const blob = new Blob([res.certificate], { type: 'application/x-x509-ca-cert' });
+  const catName = authority.value;
+  const templateSelected = template.value?.id;
 
-  // Create a URL for the Blob
-  const url = URL.createObjectURL(blob);
+  const dataString = {
+    request: certificateText.value,
+    requestAttributes: []
+  }
+  try {
+    isLoading.value = false;
+    const res = await certificateSignRequest(catName, templateSelected, dataString);
+    const blob = new Blob([res.certificate], { type: 'application/x-x509-ca-cert' });
+    // Create a URL for the Blob
+    const url = URL.createObjectURL(blob);
 
-  // Create an anchor element to trigger the download
-  const anchor = document.createElement('a');
-  anchor.href = url;
-  anchor.download = 'newApiCert.cer'; // Specify the filename
-  anchor.style.display = 'none';
+    // Create an anchor element to trigger the download
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = certName.value.length > 0 ? `${certName.value}.cer` : 'newCertificateSigned.cer'; // Specify the filename
+    anchor.style.display = 'none';
 
-  // Append the anchor to the body and trigger the download
-  document.body.appendChild(anchor);
-  anchor.click();
+    // Append the anchor to the body and trigger the download
+    document.body.appendChild(anchor);
+    anchor.click();
 
-  // Cleanup: remove the anchor and revoke the URL
-  document.body.removeChild(anchor);
-  URL.revokeObjectURL(url);
+    // Cleanup: remove the anchor and revoke the URL
+    document.body.removeChild(anchor);
+    URL.revokeObjectURL(url);
+
+    toast.add({
+      group: 'layoutToast',
+      severity: 'success',
+      summary: `Great`,
+      detail: `Certification signed successful`,
+      life: 3000
+    });
+
+  } catch (err) {
+    isLoading.value = false;
+    console.log(err);
+    toast.add({
+      group: 'layoutToast',
+      severity: 'error',
+      summary: err.code,
+      detail: err.message,
+      life: 3000
+    });
+  }
+}
+
+const reload = async () => {
+  location.reload();
 }
 
 onMounted(() => {

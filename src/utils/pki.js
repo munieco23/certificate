@@ -1,6 +1,16 @@
 import * as pkijs from 'pkijs'
 import * as asn1js from 'asn1js'
 
+export const generatePrivateKey = async () => {
+  const crypto = pkijs.getCrypto(true)
+  const algorithm = pkijs.getAlgorithmParameters('RSASSA-PKCS1-v1_5', 'generateKey')
+  if ('hash' in algorithm.algorithm) {
+    algorithm.algorithm.hash.name = 'SHA-256'
+  }
+  const keys = await crypto.generateKey(algorithm.algorithm, true, algorithm.usages)
+  return keys.privateKey
+}
+
 export const useCreateCertificate = async () => {
   const crypto = pkijs.getCrypto(true)
 
