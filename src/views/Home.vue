@@ -1,5 +1,5 @@
 <template>
-  <Navbar></Navbar>
+  <Navbar v-model:userData="userData"></Navbar>
   <div class="main flex justify-content-center">
     <div class="col-3">
       <h1 class="w-full text-center mb-2">Welcome!</h1>
@@ -14,5 +14,8 @@
 </template>
 
 <script setup>
+import { ref } from "vue";
 import Navbar from '../components/NavBar.vue'
+const userData = ref({});
+
 </script>

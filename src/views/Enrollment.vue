@@ -1,5 +1,5 @@
 <template>
-  <Navbar></Navbar>
+  <Navbar v-model:userData="userData"></Navbar>
   <div class="main flex justify-content-center">
     <div class="col-4">
       <h1 class="mb-3 text-center">Enrollment</h1>
@@ -48,6 +48,7 @@ const template = ref(null);
 const certificateText = ref(null);
 const certName = ref("");
 const _data = ref([]);
+const userData = ref();
 
 watch(_data, (v) => {
   if (v) {
@@ -73,7 +74,8 @@ watch(authority, (v) => {
 })
 
 const useGetCertAuthorities = async () => {
-  const res = await getCertificationAuthorities();
+  debugger
+  const res = await getCertificationAuthorities(userData.value);
   if (res.certificationAuthorities) {
     _data.value = res.certificationAuthorities;
   }
@@ -83,16 +85,6 @@ const allowSave = computed(() => {
   return !certificateText.value || !template.value;
 })
 
-const certificationAuthorities = async () => {
-  isLoading.value = true;
-  try {
-    isLoading.value = false;
-    const res = await getCertificationAuthorities();
-  } catch (err) {
-    isLoading.value = false;
-    console.log(err);
-  }
-}
 
 const requestCertificate = async () => {
   isLoading.value = true;
@@ -106,7 +98,7 @@ const requestCertificate = async () => {
   }
   try {
     isLoading.value = false;
-    const res = await certificateSignRequest(catName, templateSelected, dataString);
+    const res = await certificateSignRequest(userData.value, catName, templateSelected, dataString);
     const blob = new Blob([res.certificate], { type: 'application/x-x509-ca-cert' });
     // Create a URL for the Blob
     const url = URL.createObjectURL(blob);

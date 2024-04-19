@@ -6,9 +6,9 @@ const baseEndpoint = `${basePath}/v1`
 const api = axios.create({
   baseURL: `${baseEndpoint}`
 })
-const authToken = btoa('administrator:Testing1')
 
-export const getCertificationAuthorities = async ({} = {}) => {
+export const getCertificationAuthorities = async (usrData) => {
+  const authToken = btoa(`${usrData.username}:${usrData.password}`)
   let { data } = await api.get(`/certification-authorities`, {
     headers: {
       Authorization: `Basic ${authToken}`
@@ -17,7 +17,8 @@ export const getCertificationAuthorities = async ({} = {}) => {
   return data
 }
 
-export const certificateSignRequest = async (catName, template, obj) => {
+export const certificateSignRequest = async (usrData, catName, template, obj) => {
+  const authToken = btoa(`${usrData.username}:${usrData.password}`)
   let { data: data } = await api.post(
     `/certificates/${catName}?certificateTemplate=${template}`,
     {
