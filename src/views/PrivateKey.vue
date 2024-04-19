@@ -1,5 +1,5 @@
 <template>
-  <Navbar></Navbar>
+  <Navbar v-model:userData="userData" v-model:isLoading="isLoading"></Navbar>
   <div class="main flex justify-content-center">
     <div class="col-4">
       <h1 class="mb-3 text-center">Generate Private Key</h1>
@@ -29,6 +29,7 @@ import Textarea from 'primevue/textarea';
 const toast = useToast();
 const isLoading = ref(false);
 const privateKey = ref(null);
+const userData = ref()
 
 const useGeneratePrivateKey = async () => {
   isLoading.value = true;

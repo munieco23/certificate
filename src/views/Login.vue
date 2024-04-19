@@ -1,4 +1,7 @@
 <template>
+  <div class="fixed w-full h-full top-0 left-0 loading" v-if="isLoading">
+    <ProgressSpinner />
+  </div>
   <div class="main flex justify-content-center">
     <div class="col-3">
       <h1 class="mb-3 text-center">Login</h1>
@@ -27,6 +30,7 @@ import InputText from 'primevue/inputtext';
 import { useToast } from "primevue/usetoast";
 import { useSessionStore } from '../stores/session'
 import { RouterView, useRouter } from 'vue-router';
+import ProgressSpinner from 'primevue/progressspinner';
 
 const toast = useToast();
 const isLoading = ref(false);

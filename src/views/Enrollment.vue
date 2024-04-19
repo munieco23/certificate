@@ -1,5 +1,5 @@
 <template>
-  <Navbar v-model:userData="userData"></Navbar>
+  <Navbar v-model:userData="userData" v-model:isLoading="isLoading"></Navbar>
   <div class="main flex justify-content-center">
     <div class="col-4">
       <h1 class="mb-3 text-center">Enrollment</h1>
@@ -9,43 +9,16 @@
             <label>Select Template:</label>
           </div>
           <div class="col-8">
-            <Dropdown
-              class="w-full"
-              v-model="template"
-              :options="tempOptions"
-              optionLabel="name"
-              optionId="id"
-              placeholder="Select an option"
-            ></Dropdown>
+            <Dropdown class="w-full" v-model="template" :options="tempOptions" optionLabel="name" optionId="id"
+              placeholder="Select an option"></Dropdown>
           </div>
         </div>
-        <Textarea
-          class="w-full mb-2"
-          v-model="certificateText"
-          rows="5"
-          cols="30"
-          placeholder="paste code here"
-        />
-        <InputText
-          class="w-full"
-          v-model="certName"
-          placeholder="(Optional) Certificate name"
-        ></InputText>
+        <Textarea class="w-full mb-2" v-model="certificateText" rows="5" cols="30" placeholder="paste code here" />
+        <InputText class="w-full" v-model="certName" placeholder="(Optional) Certificate name"></InputText>
         <div class="footer-container flex gap-2">
-          <Button
-            label="Reset"
-            severity="secondary"
-            class="w-20rem m-auto p-button"
-            @click="reload()"
-          ></Button>
-          <Button
-            label="Request certificate"
-            severity="primary"
-            class="w-20rem m-auto p-button"
-            @click="requestCertificate()"
-            :loading="isLoading"
-            :disabled="allowSave"
-          ></Button>
+          <Button label="Reset" severity="secondary" class="w-20rem m-auto p-button" @click="reload()"></Button>
+          <Button label="Request certificate" severity="primary" class="w-20rem m-auto p-button"
+            @click="requestCertificate()" :loading="isLoading" :disabled="allowSave"></Button>
         </div>
       </div>
     </div>
