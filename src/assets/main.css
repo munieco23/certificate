@@ -1,9 +1,12 @@
 @import './base.css';
+.main {
+  padding: 1rem;
+  min-height: 100%;
+}
 
 #app {
-  max-width: 1280px;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 2rem;
   font-weight: normal;
 }
 
@@ -13,6 +16,18 @@ a,
   color: hsla(160, 100%, 37%, 1);
   transition: 0.4s;
   padding: 3px;
+}
+
+.p-menuitem-text {
+  padding-right: 10px;
+}
+
+.p-menuitem-icon {
+  padding: 10px;
+}
+
+.p-menuitem {
+  margin: 0 5px;
 }
 
 @media (hover: hover) {
