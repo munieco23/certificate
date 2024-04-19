@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-const basePath = 'http://192.168.30.11:5001'
+//const basePath = 'http://192.168.30.11:5001'
+const basePath = 'http://localhost:5001'
 const baseEndpoint = `${basePath}/v1`
 const api = axios.create({
   baseURL: `${baseEndpoint}`
