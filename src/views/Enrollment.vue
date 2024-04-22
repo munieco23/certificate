@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <Navbar v-model:userData="userData" v-model:isLoading="isLoading"></Navbar>
   <div class="main flex justify-content-center">
@@ -9,16 +10,43 @@
             <label>Select Template:</label>
           </div>
           <div class="col-8">
-            <Dropdown class="w-full" v-model="template" :options="tempOptions" optionLabel="name" optionId="id"
-              placeholder="Select an option"></Dropdown>
+            <Dropdown
+              class="w-full"
+              v-model="template"
+              :options="tempOptions"
+              optionLabel="name"
+              optionId="id"
+              placeholder="Select an option"
+            ></Dropdown>
           </div>
         </div>
-        <Textarea class="w-full mb-2" v-model="certificateText" rows="5" cols="30" placeholder="paste code here" />
-        <InputText class="w-full" v-model="certName" placeholder="(Optional) Certificate name"></InputText>
+        <Textarea
+          class="w-full mb-2"
+          v-model="certificateText"
+          rows="5"
+          cols="30"
+          placeholder="paste code here"
+        />
+        <InputText
+          class="w-full"
+          v-model="certName"
+          placeholder="(Optional) Certificate name"
+        ></InputText>
         <div class="footer-container flex gap-2">
-          <Button label="Reset" severity="secondary" class="w-20rem m-auto p-button" @click="reload()"></Button>
-          <Button label="Request certificate" severity="primary" class="w-20rem m-auto p-button"
-            @click="requestCertificate()" :loading="isLoading" :disabled="allowSave"></Button>
+          <Button
+            label="Reset"
+            severity="secondary"
+            class="w-20rem m-auto p-button"
+            @click="reload()"
+          ></Button>
+          <Button
+            label="Request certificate"
+            severity="primary"
+            class="w-20rem m-auto p-button"
+            @click="requestCertificate()"
+            :loading="isLoading"
+            :disabled="allowSave"
+          ></Button>
         </div>
       </div>
     </div>
@@ -29,7 +57,6 @@
 <script setup>
 import Toast from 'primevue/toast'
 import { ref, watch, computed, onMounted } from 'vue'
-import { nextTick } from 'vue'
 import Button from 'primevue/button'
 import Dropdown from 'primevue/dropdown'
 import InputText from 'primevue/inputtext'
@@ -47,7 +74,10 @@ const template = ref(null)
 const certificateText = ref(null)
 const certName = ref('')
 const _data = ref([])
-const userData = ref()
+const userData = ref({
+  username: '',
+  password: ''
+})
 
 watch(_data, (v) => {
   if (v) {

@@ -2,8 +2,8 @@ import { defineStore } from 'pinia'
 import { useStorage } from '@vueuse/core'
 
 const defaultData = {
-  username: null,
-  password: null
+  username: '',
+  password: ''
 }
 
 export const useSessionStore = defineStore('certSession', {

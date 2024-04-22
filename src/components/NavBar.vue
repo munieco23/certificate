@@ -6,7 +6,7 @@
     <div class="card">
       <Menubar :model="items" class="h-5rem gap-3">
         <template #end>
-          <div class="flex justify-content-end">Hola {{ sessionStore.username }}!</div>
+          <div class="flex justify-content-end">Hola {{ sessionStore?.username }}!</div>
         </template>
       </Menubar>
     </div>
@@ -16,21 +16,21 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import Menubar from 'primevue/menubar'
-import { RouterView, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { onMounted } from 'vue'
 import { checkIfNotLogged } from '../utils/controlSession.js'
 import { useSessionStore } from '../stores/session'
 import { useVModel } from '@vueuse/core'
-import ProgressSpinner from 'primevue/progressspinner';
-import { storeToRefs } from "pinia";
+import ProgressSpinner from 'primevue/progressspinner'
+import { storeToRefs } from 'pinia'
 
-const props = defineProps<{ modelValue: string }>()
+const props = defineProps<{ userData: Object; isLoading: Boolean }>()
 const emit = defineEmits(['update:modelValue'])
 
 const router = useRouter()
-const { stored: sessionStore } = storeToRefs(useSessionStore());
+const { stored: sessionStore } = storeToRefs(useSessionStore())
 
-const goto = (path) => {
+const goto = (path = '') => {
   router.push(path)
 }
 
@@ -61,9 +61,9 @@ const items = ref([
 ])
 
 const logout = () => {
-  cIsLoading.value = true;
-  sessionStore.value.username = null
-  sessionStore.value.password = null
+  cIsLoading.value = true
+  sessionStore.value.username = ''
+  sessionStore.value.password = ''
   setTimeout(() => {
     goto('/')
   }, 500)
@@ -74,7 +74,10 @@ onMounted(() => {
   if (check) {
     goto('/')
   } else {
-    vUserData.value = { username: sessionStore.value.username, password: sessionStore.value.password }
+    vUserData.value = {
+      username: sessionStore.value.username,
+      password: sessionStore.value.password
+    }
   }
 })
 </script>
