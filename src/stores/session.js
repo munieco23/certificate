@@ -1,11 +1,19 @@
 import { defineStore } from 'pinia'
+import { useStorage } from '@vueuse/core'
+
+const defaultData = {
+  username: null,
+  password: null
+}
 
 export const useSessionStore = defineStore('certSession', {
-  state: () => ({ username: null, password: null }),
-  actions: {
-    setUserData(user, pass) {
-      this.username = user
-      this.password = pass
+  state: () => {
+    return {
+      stored: useStorage('usrCert', defaultData, localStorage, {
+        mergeDefaults: true
+      })
     }
-  }
+  },
+  getters: {},
+  actions: {}
 })

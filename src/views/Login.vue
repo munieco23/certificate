@@ -31,6 +31,7 @@ import { useToast } from "primevue/usetoast";
 import { useSessionStore } from '../stores/session'
 import { RouterView, useRouter } from 'vue-router';
 import ProgressSpinner from 'primevue/progressspinner';
+import { storeToRefs } from "pinia";
 
 const toast = useToast();
 const isLoading = ref(false);
@@ -40,10 +41,13 @@ const password = ref(null);
 const router = useRouter();
 
 const signIn = async () => {
-  const sessionStore = useSessionStore();
+  const { stored: sessionStore } = storeToRefs(useSessionStore());
+
   isLoading.value = true;
   if (username.value && password.value) {
-    sessionStore.setUserData(username, password);
+    sessionStore.value.username = username.value;
+    sessionStore.value.password = password.value;
+
     setTimeout(() => {
       router.push('/home');
     }, 500);
@@ -57,7 +61,6 @@ const signIn = async () => {
       life: 3000
     });
   }
-
 }
 
 </script>
