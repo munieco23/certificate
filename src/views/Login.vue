@@ -8,19 +8,21 @@
       <h1 class="mb-3 text-center">Login</h1>
       <h3 class="mb-2 text-center">Place the same windows credentials for example:</h3>
       <h3 class="mb-2 text-center">administrador / xxxxxxxx</h3>
-      <div class="p-0 flex flex-column gap-3">
-        <InputText class="w-full" v-model="username" placeholder="username"></InputText>
-        <Password class="w-full" v-model="password" placeholder="xxxxxxxx" :feedback="false" />
-        <div class="footer-container flex gap-2">
-          <Button
-            label="Sign in"
-            class="w-20rem m-auto p-button"
-            :disabled="isLoading"
-            :isLoading="isLoading"
-            @click="signIn()"
-          ></Button>
+      <form @submit.prevent="signIn">
+        <div class="p-0 flex flex-column gap-3">
+          <InputText class="w-full" v-model="username" placeholder="username"></InputText>
+          <Password class="w-full" v-model="password" placeholder="xxxxxxxx" :feedback="false" />
+          <div class="footer-container flex gap-2">
+            <Button
+              label="Sign in"
+              class="w-20rem m-auto p-button"
+              :disabled="isLoading"
+              :isLoading="isLoading"
+              type="submit"
+            ></Button>
+          </div>
         </div>
-      </div>
+      </form>
     </div>
   </div>
   <Toast position="bottom-right" group="layoutToast" />
