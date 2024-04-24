@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import Enrollment from '../views/Enrollment.vue'
-import CreatePrivateKey from '../views/PrivateKey.vue'
+import Keys from '../views/Keys.vue'
+import CreateCertificate from '../views/CreateCertificate.vue'
 import Login from '../views/Login.vue'
 
 const router = createRouter({
@@ -23,9 +24,14 @@ const router = createRouter({
       component: Enrollment
     },
     {
-      path: '/private-key',
-      name: 'private-key',
-      component: CreatePrivateKey
+      path: '/create-key',
+      name: 'create-key',
+      component: Keys
+    },
+    {
+      path: '/create-csr',
+      name: 'create-csr',
+      component: CreateCertificate
     }
   ]
 })

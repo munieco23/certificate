@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed w-full h-full top-0 left-0 loading" v-if="vIsLoading || cIsLoading">
+  <div class="fixed w-full h-full top-0 left-0 loading" v-if="vIsLoading">
     <ProgressSpinner />
   </div>
   <div class="w-full p-0">
@@ -25,7 +25,7 @@ import ProgressSpinner from 'primevue/progressspinner'
 import { storeToRefs } from 'pinia'
 
 const props = defineProps<{ userData: Object; isLoading: Boolean }>()
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:userData', 'update:isLoading'])
 
 const router = useRouter()
 const { stored: sessionStore } = storeToRefs(useSessionStore())
@@ -34,7 +34,6 @@ const goto = (path = '') => {
   router.push(path)
 }
 
-const cIsLoading = ref(false)
 const vUserData = useVModel(props, 'userData', emit)
 const vIsLoading = useVModel(props, 'isLoading', emit)
 const items = ref([
@@ -49,9 +48,14 @@ const items = ref([
     command: () => goto('/enrollment')
   },
   {
-    label: 'Generate Private Key',
+    label: 'Generate Keys',
     icon: 'pi pi-key',
-    command: () => goto('/private-key')
+    command: () => goto('/create-key')
+  },
+  {
+    label: 'Create CSR',
+    icon: 'pi pi-download',
+    command: () => goto('/create-csr')
   },
   {
     label: 'Logout',
@@ -61,7 +65,7 @@ const items = ref([
 ])
 
 const logout = () => {
-  cIsLoading.value = true
+  vIsLoading.value = true
   sessionStore.value.username = ''
   sessionStore.value.password = ''
   setTimeout(() => {
