@@ -48,9 +48,9 @@ const items = ref([
     command: () => goto('/enrollment')
   },
   {
-    label: 'Generate Keys',
-    icon: 'pi pi-key',
-    command: () => goto('/create-key')
+    label: 'Revoke CERT',
+    icon: 'pi pi-cancel',
+    command: () => goto('/revoke-certificate')
   },
   {
     label: 'Create CSR',

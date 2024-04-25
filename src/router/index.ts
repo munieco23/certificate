@@ -3,6 +3,7 @@ import Home from '../views/Home.vue'
 import Enrollment from '../views/Enrollment.vue'
 import Keys from '../views/Keys.vue'
 import CreateCertificate from '../views/CreateCertificate.vue'
+import RevokeCertificate from '../views/RevokeCertificate.vue'
 import Login from '../views/Login.vue'
 
 const router = createRouter({
@@ -22,6 +23,11 @@ const router = createRouter({
       path: '/enrollment',
       name: 'enrollment',
       component: Enrollment
+    },
+    {
+      path: '/revoke-certificate',
+      name: 'revoke-certificate',
+      component: RevokeCertificate
     },
     {
       path: '/create-key',
