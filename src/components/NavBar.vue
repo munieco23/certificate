@@ -49,13 +49,8 @@ const items = ref([
   },
   {
     label: 'Revoke CERT',
-    icon: 'pi pi-cancel',
+    icon: 'pi pi-times',
     command: () => goto('/revoke-certificate')
-  },
-  {
-    label: 'Create CSR',
-    icon: 'pi pi-download',
-    command: () => goto('/create-csr')
   },
   {
     label: 'Logout',

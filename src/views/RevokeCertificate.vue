@@ -6,21 +6,10 @@
       <form @submit.prevent="createCertificate">
         <div class="p-0 flex flex-column gap-3">
           <InputText class="w-full" v-model="serial" placeholder="Serial number"></InputText>
-          <InputText class="w-full" v-model="connection" placeholder="Connection"></InputText>
           <div class="footer-container flex gap-2">
-            <Button
-              label="Reset"
-              severity="secondary"
-              class="w-20rem m-auto p-button"
-              @click="reload()"
-            ></Button>
-            <Button
-              type="submit"
-              label="Revoke"
-              class="w-20rem m-auto p-button"
-              :disabled="false"
-              :isLoading="isLoading"
-            />
+            <Button label="Reset" severity="secondary" class="w-20rem m-auto p-button" @click="reload()"></Button>
+            <Button type="submit" label="Revoke" class="w-20rem m-auto p-button" :disabled="false"
+              :isLoading="isLoading" />
           </div>
         </div>
       </form>
@@ -31,28 +20,53 @@
 
 <script setup>
 import Toast from 'primevue/toast'
-import { ref } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import Button from 'primevue/button'
 import Navbar from '../components/NavBar.vue'
 import { useToast } from 'primevue/usetoast'
-import { revokeCertificate } from '../services/certificates.js'
+import { getCertificationAuthorities, revokeCertificate } from '../services/certificates.js'
 import InputText from 'primevue/inputtext'
 
 const toast = useToast()
 const isLoading = ref(false)
+const _data = ref([])
+const authOptions = ref([])
+const authority = ref()
 const serial = ref('')
-const connection = ref('')
 
 const userData = ref({
   username: '',
   password: ''
 })
 
+watch(_data, (v) => {
+  if (v) {
+    authOptions.value = v.map((t) => {
+      return { id: t.name, name: t.name }
+    })
+  }
+})
+
+watch(authOptions, (v) => {
+  if (v.length > 0) {
+    authority.value = authOptions.value[0]?.id
+  }
+})
+
+
+const useGetCertAuthorities = async () => {
+  isLoading.value = true
+  const res = await getCertificationAuthorities(userData.value)
+  if (res.certificationAuthorities) {
+    isLoading.value = false
+    _data.value = res.certificationAuthorities
+  }
+}
+
 const createCertificate = async () => {
   isLoading.value = true
   try {
-    const res = await revokeCertificate(userData.value, serial.value, connection.value)
-    console.log(res)
+    const res = await revokeCertificate(userData.value, authority.value, serial.value)
 
     toast.add({
       group: 'layoutToast',
@@ -74,7 +88,12 @@ const createCertificate = async () => {
   }
 }
 
+
 const reload = async () => {
   location.reload()
 }
+
+onMounted(() => {
+  useGetCertAuthorities()
+})
 </script>

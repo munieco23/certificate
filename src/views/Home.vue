@@ -3,12 +3,12 @@
   <Navbar v-model:userData="userData"></Navbar>
   <div class="main flex justify-content-center">
     <div class="col-3">
+      <h1 class="w-full text-center mb-2">🙌🏼</h1>
       <h1 class="w-full text-center mb-2">Welcome!</h1>
-      <p class="w-full text-center mb-4">This is a testing site for:</p>
+      <p class="w-full text-center text-xl mb-4">This is a testing site for:</p>
       <ul>
-        <li>Sign certificates with authority</li>
-        <li>Create Private Keys</li>
-        <li>Revoke Certificates</li>
+        <li class="text-xl">Enrollment certificates created by user</li>
+        <li class="text-xl">Revoke certificates</li>
       </ul>
     </div>
   </div>

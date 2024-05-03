@@ -127,6 +127,10 @@ const requestCertificate = async () => {
       detail: `Certification signed successful`,
       life: 3000
     })
+
+    certificateText.value = null;
+    certName.value = "";
+
   } catch (err) {
     isLoading.value = false
     console.log(err)
