@@ -24,7 +24,7 @@ import { ref, watch, onMounted } from 'vue'
 import Button from 'primevue/button'
 import Navbar from '../components/NavBar.vue'
 import { useToast } from 'primevue/usetoast'
-import { getCertificationAuthorities, revokeCertificate } from '../services/certificates.js'
+import { getCertificationAuthorities, baseEndpoint } from '../services/certificates.js'
 import InputText from 'primevue/inputtext'
 
 const toast = useToast()
@@ -65,27 +65,50 @@ const useGetCertAuthorities = async () => {
 
 const createCertificate = async () => {
   isLoading.value = true
-  try {
-    const res = await revokeCertificate(userData.value, authority.value, serial.value)
+  const basicAuth = 'Basic ' + btoa(userData.value.username + ':' + userData.value.password)
+  const url = `${baseEndpoint}/certificates/revoke/${authority.value}/${serial.value}`
+  const myHeaders = new Headers()
+  myHeaders.append('Authorization', basicAuth)
 
-    toast.add({
-      group: 'layoutToast',
-      severity: 'success',
-      summary: `Great`,
-      detail: `Certificate revoked`,
-      life: 3000
-    })
-  } catch (err) {
-    isLoading.value = false
-    console.log(err)
-    toast.add({
-      group: 'layoutToast',
-      severity: 'error',
-      summary: err.code,
-      detail: err.message,
-      life: 3000
-    })
+  const requestOptions = {
+    method: 'POST',
+    headers: myHeaders,
+    redirect: 'follow'
   }
+
+  fetch(url, requestOptions)
+    .then((response) => response.json())
+    .then((result) => {
+      isLoading.value = false
+      if (result.success) {
+        toast.add({
+          group: 'layoutToast',
+          severity: 'success',
+          summary: `Great`,
+          detail: result.message,
+          life: 3000
+        })
+      } else {
+        toast.add({
+          group: 'layoutToast',
+          severity: 'error',
+          summary: `Error`,
+          detail: result.message,
+          life: 3000
+        })
+      }
+    })
+    .catch((error) => {
+      console.error(error)
+      isLoading.value = false
+      toast.add({
+        group: 'layoutToast',
+        severity: 'error',
+        summary: error.code,
+        detail: error.message,
+        life: 3000
+      })
+    })
 }
 
 
