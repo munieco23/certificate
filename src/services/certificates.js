@@ -1,9 +1,9 @@
 import axios from 'axios'
 
-//const basePath = 'http://localhost:5001' // for local app debug
+//const basePath = 'http://localhost:5001' Use// for local app debug
 //const basePath = 'https://localhost:7241' // for server neptune debug
-const basePath = 'http://192.168.1.5:5001' // live office
-//const basePath = 'http://25.47.221.214:5001' // live hamachi
+//const basePath = 'http://192.168.1.5:5001' // live office
+const basePath = 'http://25.47.221.214:5001' // live hamachi
 
 export const baseEndpoint = `${basePath}/v1`
 const api = axios.create({
