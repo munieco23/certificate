@@ -10,16 +10,43 @@
             <label>Select Template:</label>
           </div>
           <div class="col-8">
-            <Dropdown class="w-full" v-model="template" :options="tempOptions" optionLabel="name" optionId="id"
-              placeholder="Select an option"></Dropdown>
+            <Dropdown
+              class="w-full"
+              v-model="template"
+              :options="tempOptions"
+              optionLabel="name"
+              optionId="id"
+              placeholder="Select an option"
+            ></Dropdown>
           </div>
         </div>
-        <Textarea class="w-full mb-2" v-model="certificateText" rows="5" cols="30" placeholder="paste code here" />
-        <InputText class="w-full" v-model="certName" placeholder="(Optional) Certificate name"></InputText>
+        <Textarea
+          class="w-full mb-2"
+          v-model="certificateText"
+          rows="5"
+          cols="30"
+          placeholder="paste code here"
+        />
+        <InputText
+          class="w-full"
+          v-model="certName"
+          placeholder="(Optional) Certificate name"
+        ></InputText>
         <div class="footer-container flex gap-2">
-          <Button label="Reset" severity="secondary" class="w-20rem m-auto p-button" @click="reload()"></Button>
-          <Button label="Request certificate" severity="primary" class="w-20rem m-auto p-button"
-            @click="requestCertificate()" :loading="isLoading" :disabled="allowSave"></Button>
+          <Button
+            label="Reset"
+            severity="secondary"
+            class="w-20rem m-auto p-button"
+            @click="reload()"
+          ></Button>
+          <Button
+            label="Request certificate"
+            severity="primary"
+            class="w-20rem m-auto p-button"
+            @click="requestCertificate()"
+            :loading="isLoading"
+            :disabled="allowSave"
+          ></Button>
         </div>
       </div>
     </div>
@@ -89,13 +116,10 @@ const allowSave = computed(() => {
 })
 
 const addLineBreaksEvery64Chars = (str) => {
-  // This regular expression adds a newline after every 64 characters in the string
-  return str.replace(/(.{64})/g, '$1\n');
+  return str.replace(/(.{64})/g, '$1\n')
 }
 
 const requestCertificate = async () => {
-
-
   const catName = authority.value
   const templateSelected = template.value?.id
 
@@ -108,8 +132,8 @@ const requestCertificate = async () => {
     isLoading.value = false
 
     const res = await certificateSignRequest(userData.value, catName, templateSelected, dataString)
-    const certificateFormatted = addLineBreaksEvery64Chars(res.certificate);
-    const certificateFinal = `-----BEGIN CERTIFICATE-----\r\n${certificateFormatted}\r\n-----END CERTIFICATE-----`;
+    const certificateFormatted = addLineBreaksEvery64Chars(res.certificate)
+    const certificateFinal = `-----BEGIN CERTIFICATE-----\r\n${certificateFormatted}\r\n-----END CERTIFICATE-----`
     const blob = new Blob([certificateFinal], { type: 'application/x-x509-ca-cert' })
 
     // Create a URL for the Blob
@@ -138,9 +162,8 @@ const requestCertificate = async () => {
       life: 3000
     })
 
-    certificateText.value = null;
-    certName.value = "";
-
+    certificateText.value = null
+    certName.value = ''
   } catch (err) {
     isLoading.value = false
     console.log(err)
