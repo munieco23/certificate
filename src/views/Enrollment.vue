@@ -88,6 +88,11 @@ const allowSave = computed(() => {
   return !certificateText.value || !template.value
 })
 
+const addLineBreaksEvery64Chars = (str) => {
+  // This regular expression adds a newline after every 64 characters in the string
+  return str.replace(/(.{64})/g, '$1\n');
+}
+
 const requestCertificate = async () => {
 
 
@@ -98,10 +103,15 @@ const requestCertificate = async () => {
     request: certificateText.value,
     requestAttributes: []
   }
+
   try {
     isLoading.value = false
+
     const res = await certificateSignRequest(userData.value, catName, templateSelected, dataString)
-    const blob = new Blob([res.certificate], { type: 'application/x-x509-ca-cert' })
+    const certificateFormatted = addLineBreaksEvery64Chars(res.certificate);
+    const certificateFinal = `-----BEGIN CERTIFICATE-----\r\n${certificateFormatted}\r\n-----END CERTIFICATE-----`;
+    const blob = new Blob([certificateFinal], { type: 'application/x-x509-ca-cert' })
+
     // Create a URL for the Blob
     const url = URL.createObjectURL(blob)
 
